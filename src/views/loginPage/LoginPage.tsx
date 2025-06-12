@@ -6,7 +6,7 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
+  //FormDescription,
   FormMessage,
   Form,
 } from "@/components/ui/form";
@@ -15,8 +15,8 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiBackend } from "@/clients/axios";
-import { ResponseAPI } from "@/interfaces/ResponseAPI";
-import { User } from "@/interfaces/User";
+//import { ResponseAPI } from "@/interfaces/ResponseAPI";
+//import { User } from "@/interfaces/User";
 
 const formSchema = z.object({
   email: z
@@ -45,6 +45,7 @@ export const LoginPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("Valores enviados de formulario:", values);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = await ApiBackend.post<any>("Auth/login", values);
       // const user_: User = {
       //     email: data.email,
@@ -53,6 +54,7 @@ export const LoginPage = () => {
       //     token: data.token,
       // }
       console.log("Respuesta del servidor:", data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al enviar el formulario:", error);
     }

@@ -18,7 +18,7 @@ const authInitialState: AuthState = {
 };
 
 export const AuthContext = createContext({} as AuthContextProps);
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
 

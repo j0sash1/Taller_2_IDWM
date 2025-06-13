@@ -1,31 +1,24 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-  Form,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ApiBackend } from "@/clients/axios";
+import z from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "lucide-react";
+
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { ApiBackend } from "@/clients/axios";
 import { AuthContext } from "@/contexts/auth/AuthContext";
 import { User } from "@/interfaces/User";
-import { useContext, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 
 const formSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Ingrese un correo electrónico válido." })
-    .nonempty({ message: "Email es requerido." }),
-  password: z.string().nonempty({ message: "Contraseña es requerida." }),
+  email: z.string().email("Ingrese un correo electrónico válido.").nonempty("Email es requerido."),
+  password: z.string().nonempty("Contraseña es requerida."),
 });
 
 export const LoginPage = () => {
@@ -44,92 +37,48 @@ export const LoginPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log("Valores enviados de formulario:", values);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await ApiBackend.post<any>("Auth/login", values);
-
+      const { data } = await ApiBackend.post("Auth/login", values);
       if (data.success === false) {
-        console.error("Error en la respuesta del servidor:", data.message);
-        setErrors("Error en la respuesta del servidor:");
+        setErrors(data.message || "Error en la respuesta del servidor");
         setErrorBool(true);
         return;
       }
 
-      setErrors(null);
-      setErrorBool(false);
-
-      const data_ = data.data;
       const user_: User = {
-        email: data_.email,
-        lastName: data_.lastName,
-        firtsName: data_.firtsName,
-        token: data_.token,
+        email: data.data.email,
+        lastName: data.data.lastName,
+        firtsName: data.data.firtsName,
+        token: data.data.token,
       };
 
-      console.log("Datos del usuario:", user_);
       auth(user_);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setErrors(null);
+      setErrorBool(false);
     } catch (error: any) {
       const errorCatch = error.response?.data?.message || "Error desconocido";
-      console.error("Error al enviar el formulario:", errorCatch);
       setErrors(errorCatch);
       setErrorBool(true);
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      {/* Lado izquierdo */}
-      <div className="md:w-1/2 w-full bg-blue-700 text-white flex flex-col justify-center items-center p-10">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-          Bienvenido a <br className="hidden md:block" /> Intro. al Desarrollo
-          Web Móvil 👋
-        </h1>
-        <p className="text-base md:text-lg text-justify max-w-md">
-          Evita tareas repetitivas y gana tiempo con automatización. Mejora tu
-          productividad como desarrollador móvil.
-        </p>
-        <p className="mt-10 text-xs md:text-sm text-gray-200 text-center">
-          © 2025 WebMóvil. Todos los derechos reservados.
-        </p>
-
-        <Button
-          variant={"outline"}
-          className="mt-4 text-blue-600"
-          onClick={() => router.back()}
-        >
-          <ArrowLeftIcon /> Volver
-        </Button>
-      </div>
-
-      {/* Lado derecho */}
-      <div className="md:w-1/2 w-full flex items-center justify-center bg-white px-6 py-10">
-        <div className="w-full max-w-md">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center md:text-left">
-            Ayudantía WebMóvil
-          </h2>
-          <h3 className="text-lg md:text-xl font-medium mb-2 text-center md:text-left">
-            ¡Bienvenido de nuevo!
-          </h3>
-          <p className="mb-4 text-sm text-gray-600 text-center md:text-left">
-            ¿No tienes cuenta?{" "}
-            <span
-              className="text-blue-600 underline cursor-pointer"
-              onClick={() => router.push("/register")}
-            >
-              Crea una ahora
-            </span>
-            , es gratis.
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
+        <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-center mb-1">Ingresar a mi cuenta</h1>
+          <p className="text-sm text-center text-gray-500 mb-6">
+            Ingresa sesión con tu correo y contraseña
           </p>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Correo</FormLabel>
+                    <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <Input placeholder="correo@example.com" {...field} />
                     </FormControl>
@@ -145,33 +94,55 @@ export const LoginPage = () => {
                   <FormItem>
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
+                      <Input type="password" placeholder="********" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button type="submit">Iniciar sesión</Button>
-
               {errorBool && errors && (
                 <p className="text-red-500 text-sm">{errors}</p>
               )}
+
+              <Button
+                type="submit"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-md"
+              >
+                Iniciar Sesión
+              </Button>
             </form>
           </Form>
 
-          <div className="mt-4 text-sm text-center md:text-left">
+          <div className="mt-4 text-center text-sm">
+            ¿Nuevo cliente?{" "}
+            <span
+              className="text-purple-600 hover:underline cursor-pointer"
+              onClick={() => router.push("/register")}
+            >
+              Crea una Cuenta
+            </span>
+          </div>
+
+          <div className="mt-2 text-center text-sm">
             ¿Olvidaste tu contraseña?{" "}
-            <a href="#" className="text-blue-600 underline">
+            <a href="#" className="text-purple-600 hover:underline">
               Haz clic aquí
             </a>
           </div>
+
+          <div className="mt-6 flex justify-center">
+            <Button
+              type="button"
+              onClick={() => router.back()}
+              className="flex items-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md"
+            >
+              <ArrowLeftIcon className="w-4 h-4 mr-2" />
+              Volver
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

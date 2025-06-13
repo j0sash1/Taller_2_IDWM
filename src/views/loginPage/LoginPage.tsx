@@ -6,7 +6,6 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  //FormDescription,
   FormMessage,
   Form,
 } from "@/components/ui/form";
@@ -15,22 +14,18 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiBackend } from "@/clients/axios";
-//import { ResponseAPI } from "@/interfaces/ResponseAPI";
-//import { User } from "@/interfaces/User";
+import { useRouter } from "next/navigation";
+import { ArrowLeftIcon } from "lucide-react";
+import { AuthContext } from "@/contexts/auth/AuthContext";
+import { User } from "@/interfaces/User";
+import { useContext, useState } from "react";
 
 const formSchema = z.object({
   email: z
     .string()
-    .email({
-      message: "Ingrese un correo electrónico válido.",
-    })
-    .nonempty({
-      message: "Email es requerido.",
-    }),
-
-  password: z.string().nonempty({
-    message: "Contraseña es requerida.",
-  }),
+    .email({ message: "Ingrese un correo electrónico válido." })
+    .nonempty({ message: "Email es requerido." }),
+  password: z.string().nonempty({ message: "Contraseña es requerida." }),
 });
 
 export const LoginPage = () => {
@@ -42,23 +37,44 @@ export const LoginPage = () => {
     },
   });
 
+  const [errors, setErrors] = useState<string | null>(null);
+  const [errorBool, setErrorBool] = useState<boolean>(false);
+  const { auth } = useContext(AuthContext);
+  const router = useRouter();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log("Valores enviados de formulario:", values);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = await ApiBackend.post<any>("Auth/login", values);
-      // const user_: User = {
-      //     email: data.email,
-      //     lastName: data.lastName,
-      //     firtsName: data.firtsName,
-      //     token: data.token,
-      // }
-      console.log("Respuesta del servidor:", data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data } = await ApiBackend.post<any>("Auth/login", values);
+
+      if (data.success === false) {
+        console.error("Error en la respuesta del servidor:", data.message);
+        setErrors("Error en la respuesta del servidor:");
+        setErrorBool(true);
+        return;
+      }
+
+      setErrors(null);
+      setErrorBool(false);
+
+      const data_ = data.data;
+      const user_: User = {
+        email: data_.email,
+        lastName: data_.lastName,
+        firtsName: data_.firtsName,
+        token: data_.token,
+      };
+
+      console.log("Datos del usuario:", user_);
+      auth(user_);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error("Error al enviar el formulario:", error);
+      const errorCatch = error.response?.data?.message || "Error desconocido";
+      console.error("Error al enviar el formulario:", errorCatch);
+      setErrors(errorCatch);
+      setErrorBool(true);
     }
-    // Aquí puedes manejar la lógica de inicio de sesión
   };
 
   return (
@@ -76,6 +92,14 @@ export const LoginPage = () => {
         <p className="mt-10 text-xs md:text-sm text-gray-200 text-center">
           © 2025 WebMóvil. Todos los derechos reservados.
         </p>
+
+        <Button
+          variant={"outline"}
+          className="mt-4 text-blue-600"
+          onClick={() => router.back()}
+        >
+          <ArrowLeftIcon /> Volver
+        </Button>
       </div>
 
       {/* Lado derecho */}
@@ -128,7 +152,12 @@ export const LoginPage = () => {
                   </FormItem>
                 )}
               />
+
               <Button type="submit">Iniciar sesión</Button>
+
+              {errorBool && errors && (
+                <p className="text-red-500 text-sm">{errors}</p>
+              )}
             </form>
           </Form>
 
@@ -142,4 +171,7 @@ export const LoginPage = () => {
       </div>
     </div>
   );
-};
+};   
+
+
+

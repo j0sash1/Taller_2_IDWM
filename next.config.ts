@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+    ],
+    domains: [
+      "res.cloudinary.com",
+      "images.unsplash.com",
+      "cdn.pixabay.com",
+      "cdn.shopify.com",
     ]
   }
 };

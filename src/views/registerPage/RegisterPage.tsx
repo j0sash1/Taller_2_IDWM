@@ -17,14 +17,20 @@ import { ApiBackend } from "@/clients/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
+import { toast } from "sonner";
 
-// Esquema de validación basado en el RegisterDto del backend
+// ✅ Esquema de validación Zod
 const formSchema = z
   .object({
     firtsName: z.string().min(3, "El nombre debe tener al menos 3 caracteres."),
     lastName: z.string().min(3, "El apellido debe tener al menos 3 caracteres."),
     email: z.string().email("Correo inválido"),
-    thelephone: z.string().nonempty("Teléfono obligatorio"),
+    thelephone: z
+      .string()
+      .nonempty("Teléfono obligatorio")
+      .regex(/^\d+$/, "Ingrese un número válido")
+      .min(7, "Debe tener al menos 7 dígitos")
+      .max(15, "Máximo 15 dígitos"),
     password: z
       .string()
       .min(8, "La contraseña debe tener al menos 8 caracteres.")
@@ -43,6 +49,7 @@ const formSchema = z
 export const RegisterPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange", // 🔁 Validación en tiempo real
     defaultValues: {
       firtsName: "",
       lastName: "",
@@ -76,7 +83,7 @@ export const RegisterPage = () => {
         return;
       }
 
-      // Registro exitoso → redirigir
+      toast.success("¡Registro exitoso!");
       router.push("/login");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -135,7 +142,11 @@ export const RegisterPage = () => {
                 <p className="text-red-500 text-sm text-center">{serverError}</p>
               )}
 
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!form.formState.isValid || form.formState.isSubmitting}
+              >
                 Registrarse
               </Button>
             </form>

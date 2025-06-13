@@ -68,7 +68,7 @@ export const LoginPage = () => {
 
       console.log("Datos del usuario:", user_);
       auth(user_);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorCatch = error.response?.data?.message || "Error desconocido";
       console.error("Error al enviar el formulario:", errorCatch);
@@ -113,9 +113,12 @@ export const LoginPage = () => {
           </h3>
           <p className="mb-4 text-sm text-gray-600 text-center md:text-left">
             ¿No tienes cuenta?{" "}
-            <a href="#" className="text-blue-600 underline">
+            <span
+              className="text-blue-600 underline cursor-pointer"
+              onClick={() => router.push("/register")}
+            >
               Crea una ahora
-            </a>
+            </span>
             , es gratis.
           </p>
 
@@ -171,7 +174,4 @@ export const LoginPage = () => {
       </div>
     </div>
   );
-};   
-
-
-
+};

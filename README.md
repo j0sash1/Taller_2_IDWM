@@ -112,8 +112,8 @@ Sigue los pasos a continuación para ejecutar el proyecto en tu entorno local:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/tu-repo.git
-cd nombre-del-proyecto
+git clone https://github.com/j0sash1/Taller_2_IDWM.git
+cd Taller_2_IDWM
 ```
 
 ### 2. Instalar las dependencias

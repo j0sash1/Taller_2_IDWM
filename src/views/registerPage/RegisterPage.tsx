@@ -94,12 +94,15 @@ export const RegisterPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
-        <div className="bg-white w-full max-w-4xl p-10 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold text-center mb-2">Regístrate</h1>
+      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-10 sm:py-16">
+        <div className="bg-white w-full max-w-4xl p-6 sm:p-10 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-center mb-4 sm:mb-6">Regístrate</h1>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid grid-cols-1 gap-6 md:grid-cols-2"
+            >
               {[
                 { name: "firtsName", label: "Nombre" },
                 { name: "birthDate", label: "Fecha de Nacimiento", type: "date" },
@@ -117,10 +120,15 @@ export const RegisterPage = () => {
                     <FormItem>
                       <div className="flex justify-between">
                         <FormLabel>{label}</FormLabel>
-                        <span className="text-gray-400 text-sm">obligatorio</span>
+                        <span className="text-gray-400 text-xs sm:text-sm">obligatorio</span>
                       </div>
                       <FormControl>
-                        <Input type={type} {...field} className="rounded-md" />
+                        <Input
+                          type={type}
+                          {...field}
+                          className="rounded-md"
+                          autoComplete="off"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -134,7 +142,7 @@ export const RegisterPage = () => {
                 )}
                 <Button
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-md"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-md disabled:opacity-50"
                   disabled={!form.formState.isValid || form.formState.isSubmitting}
                 >
                   Regístrate

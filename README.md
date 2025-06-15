@@ -3,7 +3,11 @@
 Este es un cliente web de comercio electrónico desarrollado con **Next.js** y **TypeScript** como parte del Taller 2 de la asignatura *Introducción al Desarrollo Web/Móvil* de la **Universidad Católica del Norte**. El sistema responde a los requerimientos de la empresa ficticia **BLACKCAT**, ofreciendo funcionalidades como catálogo de productos, carrito de compras y gestión de pedidos.
 
 ---
+## 📌 Integrantes
+* Jorge Nuñez Mori (21495752-3) (jorge.nunez@alumnos.ucn.cl)
+* Gustavo Miles Osorio (21444967-6) (gustavo.miles@alumnos.ucn.cl)
 
+---
 ## 📚 Descripción del Proyecto
 
 BLACKCAT solicita a los estudiantes el desarrollo de una plataforma de comercio electrónico con las siguientes características:

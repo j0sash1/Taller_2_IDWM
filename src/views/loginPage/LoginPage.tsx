@@ -64,10 +64,10 @@ export const LoginPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
-        <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold text-center mb-1">Ingresar a mi cuenta</h1>
-          <p className="text-sm text-center text-gray-500 mb-6">
+      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-8">
+        <div className="bg-white w-full max-w-md md:max-w-lg lg:max-w-md p-6 sm:p-8 rounded-lg shadow-md transition-all duration-300">
+          <h1 className="text-xl sm:text-2xl font-bold text-center mb-1">Ingresar a mi cuenta</h1>
+          <p className="text-xs sm:text-sm text-center text-gray-500 mb-6">
             Ingresa sesión con tu correo y contraseña
           </p>
 

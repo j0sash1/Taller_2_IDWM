@@ -22,14 +22,14 @@ export const Navbar = () => {
     return (
       <nav className="shadow-lg" style={navStyle}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex flex-col sm:flex-row items-center justify-between h-auto sm:h-16 py-3 sm:py-0">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mb-2 sm:mb-0">
               <div className="text-white text-xl font-bold tracking-wider">BLACKCAT</div>
             </div>
 
             {/* Barra de búsqueda */}
-            <div className="flex-1 max-w-lg mx-8">
+            <div className="flex-1 max-w-lg mx-0 sm:mx-8 w-full sm:w-auto">
               <div className="relative">
                 <Input
                   type="text"
@@ -40,7 +40,7 @@ export const Navbar = () => {
             </div>
 
             {/* Enlaces y sesión */}
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-3 sm:mt-0 w-full sm:w-auto justify-center">
               <Link href="/" className="text-white hover:text-blue-200 text-sm font-medium transition-colors">
                 Catálogo
               </Link>
@@ -50,10 +50,16 @@ export const Navbar = () => {
                   <VscAccount className="w-[95px] h-[95px] text-white" />
                 </div>
                 <div className="flex flex-col">
-                  <Link href="/login" className="text-white hover:text-blue-200 text-sm font-medium leading-tight transition-colors">
+                  <Link
+                    href="/login"
+                    className="text-white hover:text-blue-200 text-sm font-medium leading-tight transition-colors"
+                  >
                     Iniciar sesión
                   </Link>
-                  <Link href="/register" className="text-white hover:text-blue-200 text-sm leading-tight transition-colors">
+                  <Link
+                    href="/register"
+                    className="text-white hover:text-blue-200 text-sm leading-tight transition-colors"
+                  >
                     Registrarse
                   </Link>
                 </div>
@@ -71,14 +77,14 @@ export const Navbar = () => {
     return (
       <nav className="shadow-lg" style={navStyle}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex flex-col sm:flex-row items-center justify-between h-auto sm:h-16 py-3 sm:py-0">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mb-2 sm:mb-0">
               <div className="text-white text-xl font-bold tracking-wider">BLACKCAT</div>
             </div>
 
             {/* Barra de búsqueda */}
-            <div className="flex-1 max-w-lg mx-8">
+            <div className="flex-1 max-w-lg mx-0 sm:mx-8 w-full sm:w-auto">
               <div className="relative">
                 <Input
                   type="text"
@@ -89,7 +95,7 @@ export const Navbar = () => {
             </div>
 
             {/* Enlaces y sesión */}
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-3 sm:mt-0 w-full sm:w-auto justify-center">
               <Link href="/" className="text-white hover:text-blue-200 text-sm font-medium transition-colors">
                 Catálogo
               </Link>
@@ -102,7 +108,10 @@ export const Navbar = () => {
                   <VscAccount className="w-[95px] h-[95px] text-white" />
                 </div>
                 <div className="flex flex-col">
-                  <Link href="/login" className="text-white hover:text-blue-200 text-sm font-medium leading-tight transition-colors">
+                  <Link
+                    href="/login"
+                    className="text-white hover:text-blue-200 text-sm font-medium leading-tight transition-colors"
+                  >
                     Mi perfil
                   </Link>
                 </div>
@@ -118,14 +127,14 @@ export const Navbar = () => {
     return (
       <nav className="shadow-lg" style={navStyle}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex flex-col sm:flex-row items-center justify-between h-auto sm:h-16 py-3 sm:py-0">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mb-2 sm:mb-0">
               <div className="text-white text-xl font-bold tracking-wider">BLACKCAT</div>
             </div>
 
             {/* Barra de búsqueda */}
-            <div className="flex-1 max-w-lg mx-8">
+            <div className="flex-1 max-w-lg mx-0 sm:mx-8 w-full sm:w-auto">
               <div className="relative">
                 <Input
                   type="text"
@@ -136,7 +145,7 @@ export const Navbar = () => {
             </div>
 
             {/* Enlaces y sesión */}
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-3 sm:mt-0 w-full sm:w-auto justify-center">
               <Link href="/" className="text-white hover:text-blue-200 text-sm font-medium transition-colors">
                 Usuarios
               </Link>

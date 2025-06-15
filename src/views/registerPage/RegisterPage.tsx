@@ -86,6 +86,7 @@ export const RegisterPage = () => {
 
       toast.success("¡Registro exitoso!");
       router.push("/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any  
     } catch (error: any) {
       setServerError(error.response?.data?.message || "Error al registrar.");
     }

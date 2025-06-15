@@ -18,8 +18,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { toast } from "sonner";
+import { Navbar } from "@/components/Navbar";
 
-// ✅ Esquema de validación Zod
+// ✅ Esquema de validación
 const formSchema = z
   .object({
     firtsName: z.string().min(3, "El nombre debe tener al menos 3 caracteres."),
@@ -49,7 +50,7 @@ const formSchema = z
 export const RegisterPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onChange", // 🔁 Validación en tiempo real
+    mode: "onChange",
     defaultValues: {
       firtsName: "",
       lastName: "",
@@ -68,7 +69,7 @@ export const RegisterPage = () => {
     try {
       const payload = {
         ...values,
-        birthDate: values.birthDate ? values.birthDate : null,
+        birthDate: values.birthDate || null,
         street: null,
         number: null,
         commune: null,
@@ -85,42 +86,31 @@ export const RegisterPage = () => {
 
       toast.success("¡Registro exitoso!");
       router.push("/login");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setServerError(error.response?.data?.message || "Error al registrar.");
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      <div className="md:w-1/2 w-full bg-blue-700 text-white flex flex-col justify-center items-center p-10">
-        <h1 className="text-3xl font-bold mb-4 text-center">¡Regístrate!</h1>
-        <p className="text-base text-center max-w-md">
-          Únete a la comunidad de WebMóvil. Es gratis y rápido.
-        </p>
-        <Button
-          variant="outline"
-          className="mt-6 text-blue-700 bg-white"
-          onClick={() => router.back()}
-        >
-          <ArrowLeftIcon /> Volver
-        </Button>
-      </div>
-
-      <div className="md:w-1/2 w-full flex items-center justify-center bg-white px-6 py-10">
-        <div className="w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">Crear cuenta</h2>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-10 sm:py-16">
+        <div className="bg-white w-full max-w-4xl p-6 sm:p-10 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-center mb-4 sm:mb-6">Regístrate</h1>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid grid-cols-1 gap-6 md:grid-cols-2"
+            >
               {[
                 { name: "firtsName", label: "Nombre" },
-                { name: "lastName", label: "Apellido" },
-                { name: "email", label: "Correo electrónico" },
-                { name: "thelephone", label: "Teléfono" },
-                { name: "birthDate", label: "Fecha de nacimiento (opcional)", type: "date" },
+                { name: "birthDate", label: "Fecha de Nacimiento", type: "date" },
+                { name: "lastName", label: "Apellidos" },
                 { name: "password", label: "Contraseña", type: "password" },
+                { name: "thelephone", label: "Número telefónico" },
                 { name: "confirmPassword", label: "Confirmar contraseña", type: "password" },
+                { name: "email", label: "Correo electrónico" },
               ].map(({ name, label, type = "text" }) => (
                 <FormField
                   key={name}
@@ -128,9 +118,17 @@ export const RegisterPage = () => {
                   name={name as keyof z.infer<typeof formSchema>}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{label}</FormLabel>
+                      <div className="flex justify-between">
+                        <FormLabel>{label}</FormLabel>
+                        <span className="text-gray-400 text-xs sm:text-sm">obligatorio</span>
+                      </div>
                       <FormControl>
-                        <Input type={type} {...field} />
+                        <Input
+                          type={type}
+                          {...field}
+                          className="rounded-md"
+                          autoComplete="off"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -138,21 +136,43 @@ export const RegisterPage = () => {
                 />
               ))}
 
-              {serverError && (
-                <p className="text-red-500 text-sm text-center">{serverError}</p>
-              )}
+              <div className="col-span-full">
+                {serverError && (
+                  <p className="text-red-500 text-sm text-center mb-2">{serverError}</p>
+                )}
+                <Button
+                  type="submit"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-md disabled:opacity-50"
+                  disabled={!form.formState.isValid || form.formState.isSubmitting}
+                >
+                  Regístrate
+                </Button>
+              </div>
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!form.formState.isValid || form.formState.isSubmitting}
-              >
-                Registrarse
-              </Button>
+              <div className="col-span-full text-center text-sm mt-2">
+                ¿Ya estás registrado?{" "}
+                <span
+                  className="text-purple-600 hover:underline cursor-pointer"
+                  onClick={() => router.push("/login")}
+                >
+                  Inicia Sesión
+                </span>
+              </div>
+
+              <div className="col-span-full flex justify-center mt-4">
+                <Button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="flex items-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md"
+                >
+                  <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                  Volver
+                </Button>
+              </div>
             </form>
           </Form>
         </div>
       </div>
-    </div>
+    </>
   );
 };

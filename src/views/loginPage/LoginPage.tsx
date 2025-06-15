@@ -7,7 +7,14 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "lucide-react";
 
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -17,7 +24,10 @@ import { User } from "@/interfaces/User";
 import { Navbar } from "@/components/Navbar";
 
 const formSchema = z.object({
-  email: z.string().email("Ingrese un correo electrónico válido.").nonempty("Email es requerido."),
+  email: z
+    .string()
+    .email("Ingrese un correo electrónico válido.")
+    .nonempty("Email es requerido."),
   password: z.string().nonempty("Contraseña es requerida."),
 });
 
@@ -54,6 +64,8 @@ export const LoginPage = () => {
       auth(user_);
       setErrors(null);
       setErrorBool(false);
+      router.push("/");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorCatch = error.response?.data?.message || "Error desconocido";
       setErrors(errorCatch);
@@ -66,7 +78,9 @@ export const LoginPage = () => {
       <Navbar />
       <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-8">
         <div className="bg-white w-full max-w-md md:max-w-lg lg:max-w-md p-6 sm:p-8 rounded-lg shadow-md transition-all duration-300">
-          <h1 className="text-xl sm:text-2xl font-bold text-center mb-1">Ingresar a mi cuenta</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-center mb-1">
+            Ingresar a mi cuenta
+          </h1>
           <p className="text-xs sm:text-sm text-center text-gray-500 mb-6">
             Ingresa sesión con tu correo y contraseña
           </p>
@@ -94,7 +108,11 @@ export const LoginPage = () => {
                   <FormItem>
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="********" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

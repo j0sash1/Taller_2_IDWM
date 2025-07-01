@@ -22,6 +22,7 @@ import { ApiBackend } from "@/clients/axios";
 import { AuthContext } from "@/contexts/auth/AuthContext";
 import { User } from "@/interfaces/User";
 import { Navbar } from "@/components/Navbar";
+import { decodeJWT } from "@/helpers/decodeJWT";
 
 const formSchema = z.object({
   email: z
@@ -53,18 +54,34 @@ export const LoginPage = () => {
         setErrorBool(true);
         return;
       }
-
-      const user_: User = {
-        email: data.data.email,
-        lastName: data.data.lastName,
-        firtsName: data.data.firtsName,
-        token: data.data.token,
-      };
-
-      auth(user_);
       setErrors(null);
       setErrorBool(false);
-      router.push("/");
+
+      const data_ = data.data;
+      const payload = decodeJWT(data_.token);
+      if (!payload) {
+        console.error("Error al decodificar el token:", data_.token);
+        setErrors('Error al decodificar el token.');
+        setErrorBool(true);
+        return;
+      }
+      const user_: User = {
+        email: data_.email,
+        lastName: data_.lastName,
+        firtsName: data_.firtsName,
+        token: data_.token,
+        role: payload.role,
+      };
+
+      localStorage.setItem('token', data_.token);
+      auth(user_);
+      
+      if(payload.role === 'Admin') {
+        router.push('/admin');
+      } else if(payload.role === 'User') {
+        router.push("/client");
+      }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorCatch = error.response?.data?.message || "Error desconocido";

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner"; // <-- Importa Toaster
+import { Navbar } from '@/components/Navbar';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function AppLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-[100vw] overflow-x-hidden`}
       >
         <Providers>
+          <Navbar/>
           {children}
           <Toaster /> {/* <- Aquí se muestra Sonner */}
         </Providers>

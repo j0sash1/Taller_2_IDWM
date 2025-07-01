@@ -5,7 +5,6 @@ import { useProductStore } from "@/stores/ProductStore";
 import { useEffect, useState } from "react";
 import { ProductCard } from '../../components/products/ProductCard';
 import { ProductDialog } from "@/components/products/ProductDialog";
-import { Navbar } from '../../components/Navbar';
 
 export default function ViewProductPage() {
     const { products, loading, fetchProducts, filters } = useProductStore();
@@ -31,8 +30,6 @@ export default function ViewProductPage() {
 
     return (
         <div className="min-h-screen bg-[#d9d9d9] flex flex-col">
-            {/* Navbar */}
-            <Navbar />
 
             {/* Barra de filtros */}
             <div className="w-full px-4 sm:px-6 md:px-8 py-4 bg-white shadow">

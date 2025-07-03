@@ -7,20 +7,21 @@ import { useEffect } from "react";
 
 
 export default function ClientLayout({children}: {children: React.ReactNode}) {
-    const {user,status} = useAuth();
+    const {user, status} = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if(!user?.token){
+        if (!user?.token){
             router.replace('/login');
             return;
         }
 
         const payload = decodeJWT (user.token);
-        if(!payload || payload.role !== 'User') {
+        if (!payload || payload.role !== 'User') {
             router.replace('/');
             return;
         }
+
     }, [user, status, router]);
 
     if (status === 'checking' || !user) return <div>Cargando...</div>;
@@ -29,7 +30,7 @@ export default function ClientLayout({children}: {children: React.ReactNode}) {
         <html lang ="en">
             <main>
                 {children}
-            </main>
+            </main>                
         </html>
     )
 }

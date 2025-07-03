@@ -2,17 +2,22 @@ import { ApiBackend } from "@/clients/axios";
 import { Product } from "@/interfaces/Product";
 import { ResponseAPI } from "@/interfaces/ResponseAPI";
 
-
 export interface ProductFilters {
     pageNumber: number;
     pageSize: number;
+    search?: string;
+    categories?: string;
+    brands?: string;
+    orderBy?: "price" | "priceDesc";
 }
 
 export const ProductServices = {
+
     async fetchProducts(filters: ProductFilters){
-        const {data} = await ApiBackend.get<ResponseAPI>("Product", {
-            params: filters
+        const {data} =  await ApiBackend.get<ResponseAPI>("Product", { 
+            params: {...filters}
         });
+
         if (!data.success) {
             throw new Error(data.message || "Error al obtener los productos");
         }
@@ -20,9 +25,10 @@ export const ProductServices = {
             throw new Error("No se encontraron productos");
         }
         if (data.errors){
-            console.error("Errors:", data.errors);           
+            console.error("Errors:", data.errors);
         }
 
         return data.data as Product[];
     }
+
 }

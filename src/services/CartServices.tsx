@@ -2,11 +2,12 @@ import { ApiBackend } from "@/clients/axios"
 import { ResponseAPI } from "@/interfaces/ResponseAPI";
 
 
+
 export const CartService = {
     fetchCart: async () => {
         try{
             const response = await ApiBackend.get<ResponseAPI>('basket');
-            console.log("Cart fetched successfully:", response.data);
+            console.log("Cart fetched successfully:", response);
             return response.data?.data;
         } catch (error) {
             console.error("Error fetching cart:", error);
@@ -20,6 +21,8 @@ export const CartService = {
                 `basket?productId=${productId}&quantity=${quantity}`,                
             );
             console.log("Product added to cart successfully:", resp.data);
+            const basketId = resp.data.data.basketId;
+            document.cookie = `basketId=${basketId}; path=/; max-age=${60 * 60 * 24}`;
             return resp.data?.data;
         } catch (error) {
             console.error("Error adding to cart:", error);

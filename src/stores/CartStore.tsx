@@ -48,6 +48,7 @@ export const useCartStore = create<CartState>((set) => ({
                 totalPrice: response?.totalPrice || 0,
                 loading: false,
             });
+            console.log(response.items);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error:any) {
             set({ error: error.message || "Error adding to cart" });

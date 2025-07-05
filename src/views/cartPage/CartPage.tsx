@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { CircleMinus, PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { useRouter } from "next/navigation";
 
 export const CartPage = () => {
-    const { items: cart, totalPrice, fetchCart, addToCart, removeFromCart, createOrder } = useCartStore();
+    const router = useRouter();
+    const { items: cart, totalPrice, fetchCart, addToCart, removeFromCart } = useCartStore();
 
     useEffect(() => {
         fetchCart();
@@ -20,16 +21,8 @@ export const CartPage = () => {
             alert("El carrito está vacío. Agrega productos antes de realizar el pedido.");
             return;
         }
-        createOrder()
-            .then(() => {
-                console.log("Pedido creado exitosamente");
-            })
-            .catch((error) => {
-                console.error("Error al crear el pedido:", error);
-                alert("Hubo un error al realizar el pedido. Inténtalo de nuevo más tarde.");
-            });
-        alert(`Pedido realizado exitosamente. Total a pagar: $${totalPrice}`);
-    }
+        router.push("/checkout"); // Redirige al checkout
+    };
 
     const handleRemoveItem = (productId: number) => {
         const item = cart.find(item => item.productId === productId);
@@ -39,14 +32,14 @@ export const CartPage = () => {
         } else {
             alert(`Producto ${productId} no encontrado en el carrito.`);
         }
-    }
+    };
 
     return (
         <div className="bg-gray-100 min-h-screen py-10 px-4 md:px-10 pt-20">
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-2xl font-bold mb-6">
                     {cart.map((item: CartItem) => (
-                        <div key={item.productId} className="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4">
+                        <div key={item.productId} className="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 mb-4">
                             <Image
                                 src={item.urls?.[0] || '/Producto.jpg'}
                                 alt={item.name}
@@ -61,7 +54,7 @@ export const CartPage = () => {
                                     <div className="flex items-center mt-2 gap-2 flex-wrap">
                                         <span className="text-sm">Cantidad: </span>
                                         <Button
-                                            size={'sm'}
+                                            size="sm"
                                             onClick={() => removeFromCart(item.productId, 1)}
                                             className="bg-black text-white"
                                         >
@@ -71,9 +64,10 @@ export const CartPage = () => {
                                         <span className="text-sm">{item.quantity}</span>
 
                                         <Button
-                                            size={'sm'}
+                                            size="sm"
                                             onClick={() => addToCart(item.productId, 1)}
-                                            className="bg-blue-500 text-white">
+                                            className="bg-blue-500 text-white"
+                                        >
                                             <PlusIcon />
                                         </Button>
                                     </div>
@@ -89,45 +83,48 @@ export const CartPage = () => {
                                     variant="ghost"
                                     size="icon"
                                     className="text-red-500 hover:bg-red-100"
-                                    onClick={() => handleRemoveItem(item.productId)}>
+                                    onClick={() => handleRemoveItem(item.productId)}
+                                >
                                     <Trash2Icon className="w-5 h-5" />
                                 </Button>
                             </div>
                         </div>
-
                     ))}
-                    <div className="bg-white p-6 rounded shadow h-fit">
-                        <h2 className="text-lg font-bold mb-4">Resumen de Compra</h2>
-                        <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                                <span>Total:</span>
-                                <span>$ {totalPrice.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between font-bold text-lg border-t pt-2">
-                                <span>TOTAL:</span>
-                                <span>$ {totalPrice.toFixed(2)}</span>
-                            </div>
+                </h1>
+
+                <div className="bg-white p-6 rounded shadow h-fit mt-6">
+                    <h2 className="text-lg font-bold mb-4">Resumen de Compra</h2>
+                    <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                            <span>Total:</span>
+                            <span>$ {totalPrice.toFixed(2)}</span>
                         </div>
-                        <div className="mt-6 space-y-2">
-                            <Button
-                                className="w-full bg-green-600 hover:bg-green-700 text-white"
-                                onClick={handleCheckout}
-                            >
-                                Hacer Pedido
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="w-full"
-                                onClick={() => cart.forEach((item: { productId: number; quantity: number; }) => removeFromCart(item.productId, item.quantity))}
-                            >
-                                Vaciar Carrito
-                            </Button>
+                        <div className="flex justify-between font-bold text-lg border-t pt-2">
+                            <span>TOTAL:</span>
+                            <span>$ {totalPrice.toFixed(2)}</span>
                         </div>
                     </div>
-
-
-                </h1>
+                    <div className="mt-6 space-y-2">
+                        <Button
+                            className="w-full bg-green-600 hover:bg-green-700 text-white"
+                            onClick={handleCheckout}
+                        >
+                            Hacer Pedido
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() =>
+                                cart.forEach((item: { productId: number; quantity: number; }) =>
+                                    removeFromCart(item.productId, item.quantity)
+                                )
+                            }
+                        >
+                            Vaciar Carrito
+                        </Button>
+                    </div>
+                </div>
             </div>
         </div>
     );
-} 
+};

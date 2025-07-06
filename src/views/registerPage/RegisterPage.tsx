@@ -18,13 +18,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { toast } from "sonner";
-import { Navbar } from "@/components/Navbar";
+
 
 // ✅ Esquema de validación
 const formSchema = z
   .object({
     firtsName: z.string().min(3, "El nombre debe tener al menos 3 caracteres."),
-    lastName: z.string().min(3, "El apellido debe tener al menos 3 caracteres."),
+    lastName: z
+      .string()
+      .min(3, "El apellido debe tener al menos 3 caracteres."),
     email: z.string().email("Correo inválido"),
     thelephone: z
       .string()
@@ -86,7 +88,7 @@ export const RegisterPage = () => {
 
       toast.success("¡Registro exitoso!");
       router.push("/login");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any  
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setServerError(error.response?.data?.message || "Error al registrar.");
     }
@@ -94,10 +96,11 @@ export const RegisterPage = () => {
 
   return (
     <>
-      <Navbar />
       <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-10 sm:py-16">
         <div className="bg-white w-full max-w-4xl p-6 sm:p-10 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold text-center mb-4 sm:mb-6">Regístrate</h1>
+          <h1 className="text-2xl font-bold text-center mb-4 sm:mb-6">
+            Regístrate
+          </h1>
 
           <Form {...form}>
             <form
@@ -106,11 +109,19 @@ export const RegisterPage = () => {
             >
               {[
                 { name: "firtsName", label: "Nombre" },
-                { name: "birthDate", label: "Fecha de Nacimiento", type: "date" },
+                {
+                  name: "birthDate",
+                  label: "Fecha de Nacimiento",
+                  type: "date",
+                },
                 { name: "lastName", label: "Apellidos" },
                 { name: "password", label: "Contraseña", type: "password" },
                 { name: "thelephone", label: "Número telefónico" },
-                { name: "confirmPassword", label: "Confirmar contraseña", type: "password" },
+                {
+                  name: "confirmPassword",
+                  label: "Confirmar contraseña",
+                  type: "password",
+                },
                 { name: "email", label: "Correo electrónico" },
               ].map(({ name, label, type = "text" }) => (
                 <FormField
@@ -121,7 +132,9 @@ export const RegisterPage = () => {
                     <FormItem>
                       <div className="flex justify-between">
                         <FormLabel>{label}</FormLabel>
-                        <span className="text-gray-400 text-xs sm:text-sm">obligatorio</span>
+                        <span className="text-gray-400 text-xs sm:text-sm">
+                          obligatorio
+                        </span>
                       </div>
                       <FormControl>
                         <Input
@@ -139,12 +152,16 @@ export const RegisterPage = () => {
 
               <div className="col-span-full">
                 {serverError && (
-                  <p className="text-red-500 text-sm text-center mb-2">{serverError}</p>
+                  <p className="text-red-500 text-sm text-center mb-2">
+                    {serverError}
+                  </p>
                 )}
                 <Button
                   type="submit"
                   className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-md disabled:opacity-50"
-                  disabled={!form.formState.isValid || form.formState.isSubmitting}
+                  disabled={
+                    !form.formState.isValid || form.formState.isSubmitting
+                  }
                 >
                   Regístrate
                 </Button>

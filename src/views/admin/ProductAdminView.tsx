@@ -21,7 +21,7 @@ export default function ProductAdminView() {
         <h1 className="text-2xl font-bold text-gray-800">Productos del Sistema</h1>
         <Button
           className="bg-purple-600 text-white hover:bg-purple-700"
-          onClick={() => router.push("/admin/users")}
+          onClick={() => router.push("/admin/manageUsers")}
         >
           Administrar Usuarios
         </Button>

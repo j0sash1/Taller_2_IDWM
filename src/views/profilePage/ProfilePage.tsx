@@ -296,9 +296,7 @@ export default function ProfileView() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Número telefónico
-          </label>
+          <label className="block text-sm font-medium mb-1">Número telefónico</label>
           <div className="relative">
             <Input
               type="text"
@@ -317,9 +315,7 @@ export default function ProfileView() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Fecha de Nacimiento
-          </label>
+          <label className="block text-sm font-medium mb-1">Fecha de Nacimiento</label>
           <div className="relative">
             <Input
               type="date"
@@ -338,9 +334,7 @@ export default function ProfileView() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Correo electrónico
-          </label>
+          <label className="block text-sm font-medium mb-1">Correo electrónico</label>
           <div className="relative">
             <Input
               type="email"
@@ -357,7 +351,12 @@ export default function ProfileView() {
             </button>
           </div>
         </div>
+      </div>
 
+      <hr className="my-8 border-t border-gray-300" />
+
+      <h2 className="text-lg font-bold mb-4">Dirección de Envío</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium mb-1">Calle</label>
           <div className="relative">
@@ -435,9 +434,7 @@ export default function ProfileView() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Código Postal
-          </label>
+          <label className="block text-sm font-medium mb-1">Código Postal</label>
           <div className="relative">
             <Input
               type="text"

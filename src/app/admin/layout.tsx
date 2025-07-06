@@ -25,7 +25,6 @@ export default function AdminLayout ({children} : {children: React.ReactNode}) {
 
     return (
         <div>
-            <h1>Admin panel</h1>
             <main>
                 {children}
             </main>

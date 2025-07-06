@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/products/ProductCard";
 import { Product } from "@/interfaces/Product";
 import { ProductDialog } from "@/components/products/ProductDialog";
+import { useRouter } from "next/navigation";
 
 export const TablePage = () => {
     const { products, fetchProducts, loading, filters, setFilters } = useProductStore();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         fetchProducts();
@@ -25,7 +27,7 @@ export const TablePage = () => {
         setFilters({ ...filters, orderBy, pageNumber: 1 });
     };
 
-    const handleCatorgoryFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleCategoryFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const category = e.target.value;
         setFilters({ ...filters, categories: category, pageNumber: 1 });
     };
@@ -54,14 +56,15 @@ export const TablePage = () => {
                     placeholder="Buscar producto"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full sm:w-1/3"
+                    className="w-full sm:w-1/3 bg-white text-gray-900 placeholder-gray-500 border border-gray-300 rounded"
                 />
                 <Button onClick={handleSearch} className="bg-blue-500 text-white hover:bg-blue-600">
                     Buscar
                 </Button>
+
                 <select
                     onChange={handleBrandFilter}
-                    className="border p-2 rounded"
+                    className="bg-white text-gray-900 border border-gray-300 p-2 rounded w-full sm:w-auto"
                     defaultValue={""}
                 >
                     <option value="">Todas las marcas</option>
@@ -70,11 +73,11 @@ export const TablePage = () => {
                 </select>
 
                 <select
-                    onChange={handleCatorgoryFilter}
-                    className="border p-2 rounded"
+                    onChange={handleCategoryFilter}
+                    className="bg-white text-gray-900 border border-gray-300 p-2 rounded w-full sm:w-auto"
                     defaultValue={""}
                 >
-                    <option value="">Todas las Categorías</option>
+                    <option value="">Todas las categorías</option>
                     <option value="Clothing">Clothing</option>
                     <option value="Otros">Otro ejemplo X</option>
                 </select>
@@ -92,15 +95,20 @@ export const TablePage = () => {
                 >
                     Precio Descendente
                 </Button>
+
+                <Button
+                    onClick={() => router.push("/orders")}
+                    className="bg-purple-600 text-white hover:bg-purple-700"
+                >
+                    Ver pedidos
+                </Button>
             </div>
 
             {/* Productos como tarjetas */}
             {loading ? (
                 <div className="text-center py-20 text-lg font-semibold">Cargando productos...</div>
             ) : (
-                <div
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8"
-                >
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
                     {products.map((product: Product) => (
                         <ProductCard
                             key={product.id}
@@ -116,7 +124,7 @@ export const TablePage = () => {
                 <Button
                     onClick={prevPage}
                     disabled={filters.pageNumber <= 1}
-                    className="bg-gray-500 text-white hover:bg-gray-600"
+                    className="bg-gray-500 text-white hover:bg-gray-600 disabled:opacity-50"
                 >
                     Anterior
                 </Button>
@@ -131,7 +139,7 @@ export const TablePage = () => {
                 </Button>
             </div>
 
-            {/* Modal de Detalles del Producto */}
+            {/* Modal de detalles */}
             <ProductDialog
                 product={selectedProduct}
                 open={!!selectedProduct}

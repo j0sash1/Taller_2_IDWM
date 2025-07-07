@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { ApiBackend } from "@/clients/axios";
 import { AuthContext } from "@/contexts/auth/AuthContext";
 import { User } from "@/interfaces/User";
-import { Navbar } from "@/components/Navbar";
+import { decodeJWT } from "@/helpers/decodeJWT";
 
 const formSchema = z.object({
   email: z
@@ -53,18 +53,34 @@ export const LoginPage = () => {
         setErrorBool(true);
         return;
       }
-
-      const user_: User = {
-        email: data.data.email,
-        lastName: data.data.lastName,
-        firtsName: data.data.firtsName,
-        token: data.data.token,
-      };
-
-      auth(user_);
       setErrors(null);
       setErrorBool(false);
-      router.push("/");
+
+      const data_ = data.data;
+      const payload = decodeJWT(data_.token);
+      if (!payload) {
+        console.error("Error al decodificar el token:", data_.token);
+        setErrors('Error al decodificar el token.');
+        setErrorBool(true);
+        return;
+      }
+      const user_: User = {
+        email: data_.email,
+        lastName: data_.lastName,
+        firtsName: data_.firtsName,
+        token: data_.token,
+        role: payload.role,
+      };
+
+      localStorage.setItem('token', data_.token);
+      auth(user_);
+      
+      if(payload.role === 'Admin') {
+        router.push('/admin');
+      } else if(payload.role === 'User') {
+        router.push("/client");
+      }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorCatch = error.response?.data?.message || "Error desconocido";
@@ -75,7 +91,7 @@ export const LoginPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-8">
         <div className="bg-white w-full max-w-md md:max-w-lg lg:max-w-md p-6 sm:p-8 rounded-lg shadow-md transition-all duration-300">
           <h1 className="text-xl sm:text-2xl font-bold text-center mb-1">

@@ -7,21 +7,13 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/products/ProductCard";
 import { Product } from "@/interfaces/Product";
 import { ProductDialog } from "@/components/products/ProductDialog";
+import { useRouter } from "next/navigation";
 
-export default function ViewProductPage() {
+export const TablePage = () => {
     const { products, fetchProducts, loading, filters, setFilters } = useProductStore();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-    // Estado local de paginación
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
-
-    const totalPages = Math.ceil(products.length / itemsPerPage);
-    const visibleProducts = products.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+    const router = useRouter();
 
     useEffect(() => {
         fetchProducts();
@@ -46,14 +38,12 @@ export default function ViewProductPage() {
     };
 
     const nextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage((prev) => prev + 1);
-        }
+        setFilters({ ...filters, pageNumber: filters.pageNumber + 1 });
     };
 
     const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage((prev) => prev - 1);
+        if (filters.pageNumber > 1) {
+            setFilters({ ...filters, pageNumber: filters.pageNumber - 1 });
         }
     };
 
@@ -105,14 +95,21 @@ export default function ViewProductPage() {
                 >
                     Precio Descendente
                 </Button>
+
+                <Button
+                    onClick={() => router.push("/orders")}
+                    className="bg-purple-600 text-white hover:bg-purple-700"
+                >
+                    Ver pedidos
+                </Button>
             </div>
 
-            {/* Productos */}
+            {/* Productos como tarjetas */}
             {loading ? (
                 <div className="text-center py-20 text-lg font-semibold">Cargando productos...</div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-                    {visibleProducts.map((product) => (
+                    {products.map((product: Product) => (
                         <ProductCard
                             key={product.id}
                             product={product}
@@ -126,18 +123,17 @@ export default function ViewProductPage() {
             <div className="flex justify-center items-center gap-4 mt-8">
                 <Button
                     onClick={prevPage}
-                    disabled={currentPage === 1}
+                    disabled={filters.pageNumber <= 1}
                     className="bg-gray-500 text-white hover:bg-gray-600 disabled:opacity-50"
                 >
                     Anterior
                 </Button>
                 <span className="font-medium text-gray-700">
-                    Página {currentPage} de {totalPages}
+                    Página {filters.pageNumber}
                 </span>
                 <Button
                     onClick={nextPage}
-                    disabled={currentPage === totalPages}
-                    className="bg-gray-500 text-white hover:bg-gray-600 disabled:opacity-50"
+                    className="bg-gray-500 text-white hover:bg-gray-600"
                 >
                     Siguiente
                 </Button>
@@ -151,4 +147,4 @@ export default function ViewProductPage() {
             />
         </div>
     );
-}
+};

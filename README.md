@@ -1,13 +1,16 @@
 # 🌐 Taller 2: Introducción al Desarrollo Web/Móvil (Frontend)
 
-Este es un cliente web de comercio electrónico desarrollado con **Next.js** y **TypeScript** como parte del Taller 2 de la asignatura *Introducción al Desarrollo Web/Móvil* de la **Universidad Católica del Norte**. El sistema responde a los requerimientos de la empresa ficticia **BLACKCAT**, ofreciendo funcionalidades como catálogo de productos, carrito de compras y gestión de pedidos.
+Este es un cliente web de comercio electrónico desarrollado con **Next.js** y **TypeScript** como parte del Taller 2 de la asignatura _Introducción al Desarrollo Web/Móvil_ de la **Universidad Católica del Norte**. El sistema responde a los requerimientos de la empresa ficticia **BLACKCAT**, ofreciendo funcionalidades como catálogo de productos, carrito de compras y gestión de pedidos.
 
 ---
+
 ## 📌 Integrantes
-* Jorge Nuñez Mori (21495752-3) (jorge.nunez@alumnos.ucn.cl)
-* Gustavo Miles Osorio (21444967-6) (gustavo.miles@alumnos.ucn.cl)
+
+- Jorge Nuñez Mori (21495752-3) (jorge.nunez@alumnos.ucn.cl)
+- Gustavo Miles Osorio (21444967-6) (gustavo.miles@alumnos.ucn.cl)
 
 ---
+
 ## 📚 Descripción del Proyecto
 
 BLACKCAT solicita a los estudiantes el desarrollo de una plataforma de comercio electrónico con las siguientes características:
@@ -36,14 +39,19 @@ Cada rol tiene funcionalidades específicas adaptadas a sus necesidades dentro d
 
 - **TailwindCSS**
 - **Radix UI** (Dialog, Label, Slot)
-- **Lucide React** (íconos SVG)
+- **Lucide React** y **React Icons** (íconos SVG)
 - `clsx` y `class-variance-authority` (manejo de clases condicionales)
+- **tw-animate-css** (animaciones con clases utilitarias)
 
 ### Gestión de Estado & Formularios
 
 - **Zustand** (estado global)
 - **React Hook Form** 7.57.0
 - **Zod** 3.25.50 (validación de formularios)
+
+### Tablas y Visualización
+
+- **@tanstack/react-table** (tablas con ordenamiento y filtros)
 
 ### Otros
 
@@ -55,6 +63,7 @@ Cada rol tiene funcionalidades específicas adaptadas a sus necesidades dentro d
 
 - **ESLint** (recomendado)
 - **Visual Studio Code** (recomendado)
+- **Husky** (para ejecutar hooks de Git como validaciones antes de commits)
 
 ---
 
@@ -78,8 +87,12 @@ Este proyecto **requiere una API Backend** desarrollada en **C# (.NET)** para fu
 2. Configurar la URL del backend en las variables de entorno.
 3. Verificar que el endpoint `/api/` esté operativo.
 
+📦 Puedes encontrar el repositorio del backend en:
+👉 https://github.com/j0sash1/Taller2_IDWM
+
 Ejemplo de una API funcional:  
 `https://localhost:7088/api/`
+`http://localhost:5000/api/`
 
 ---
 
@@ -94,14 +107,14 @@ cp .env.example .env.local
 Luego edita `.env.local` y asegúrate de que contenga:
 
 ```env
-NEXT_PUBLIC_API_URL="https://localhost:7088/api/"
+NEXT_PUBLIC_API_URL="http://localhost:5000/api/"
 DOMAIN=localhost
 ```
 
-| Variable              | Descripción                                                                 |
-|----------------------|-----------------------------------------------------------------------------|
-| NEXT_PUBLIC_API_URL  | URL base del backend (ej: `https://localhost:7088/api/`)                    |
-| DOMAIN               | Dominio donde se ejecuta el frontend (ej: `localhost` o tu dominio en prod) |
+| Variable            | Descripción                                                                 |
+| ------------------- | --------------------------------------------------------------------------- |
+| NEXT_PUBLIC_API_URL | URL base del backend (ej: `http://localhost:5000/api/`)                     |
+| DOMAIN              | Dominio donde se ejecuta el frontend (ej: `localhost` o tu dominio en prod) |
 
 ---
 
@@ -116,10 +129,11 @@ git clone https://github.com/j0sash1/Taller_2_IDWM.git
 cd Taller_2_IDWM
 ```
 
-### 2. Instalar las dependencias
+### 2. Instalar las dependencias y preparar Husky
 
 ```bash
 npm install
+npm run prepare
 ```
 
 ### 3. Configurar variables de entorno
